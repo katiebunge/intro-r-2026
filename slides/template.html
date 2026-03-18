@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"$if(lang)$ lang="$lang$" xml:lang="$lang$"$endif$$if(dir)$ dir="$dir$"$endif$>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+$for(author-meta)$
+  <meta name="author" content="$author-meta$" />
+$endfor$
+$if(date-meta)$
+  <meta name="date" content="$date-meta$" />
+$endif$
+$if(keywords)$
+  <meta name="keywords" content="$for(keywords)$$keywords$$sep$, $endfor$" />
+$endif$
+  <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
+  <style type="text/css">
+    $styles.html()$
+  </style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="$slidy-url$/styles/slidy.css" />
+  <style>
+    html, body, div.slidy_toc, div.slide, div.toolbar, div.sourceCode {
+      background-color: #0a0812 !important;
+      color: #faebf1 !important;
+      code {
+        color: #a7e892;
+      }
+      a {
+        color: #f5b1cc !important;
+        code {
+          color: #f5b1cc;
+        }
+        :visited {
+          color: #e45c96 !important;
+          code {
+            color: #e45c96;
+          }
+        }
+      }
+      .path-header {
+        margin-top: 1rem;
+        background-color: #413d43;
+      }
+      h1 {
+        padding-top: 1rem;
+      }
+      p {
+        padding-left: 0.5rem;
+      }
+      ul {
+        padding-left: 2rem;
+      }
+      blockquote {
+        background-color: #413d43;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+      pre {
+        background-color: #0a0812;
+        border-color: #f5b1cc;
+        code {
+          color: #faebf1 !important;
+        }
+        span.dt {
+          color: #faebf1;
+        }
+        span.co {
+          color: #aa9fa7;
+        }
+        span.fu {
+          color: #a7e892;
+        }
+        span.at {
+          color: #93e8d3;
+        }
+        span.st {
+          color: #ffc61a;
+        }
+        span.va {
+          color: #a288d9;
+        }
+        span.bu {
+          color: #00ac8c;
+        }
+      }
+    }
+  </style>
+$for(css)$
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="$css$" />
+$endfor$
+$if(math)$
+  $math$
+$endif$
+$for(header-includes)$
+  $header-includes$
+$endfor$
+  <script src="$slidy-url$/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+$if(duration)$
+  <meta name="duration" content="$duration$" />
+$endif$
+</head>
+<body id="main">
+$for(include-before)$
+$include-before$
+$endfor$
+$if(title)$
+<div class="slide titlepage">
+  <h1 class="title">$title$</h1>
+$if(subtitle)$
+  <p class="subtitle">$subtitle$</p>
+$endif$
+$if(author)$
+  <p class="author">
+$for(author)$$author$$sep$<br/>$endfor$
+  </p>
+$endif$
+$if(institute)$
+  <p class="institute">
+$for(institute)$$institute$$sep$<br/>$endfor$
+  </p>
+$endif$
+$if(date)$
+  <p class="date">$date$</p>
+$endif$
+</div>
+$endif$
+$if(toc)$
+<div class="slide" id="$idprefix$TOC">
+$table-of-contents$
+</div>
+$endif$
+$body$
+$for(include-after)$
+$include-after$
+$endfor$
+<script>
+  const PATH_SEP = "PATH_SEP";
+  let slidePath, slideLevel = ["", 0];
+  Array.from(document.getElementsByClassName("slide")).forEach((slideEle) => {
+    const nextSlideLevel = Array.from(slideEle.classList).find((className) => className.startsWith("level"));
+    if (nextSlideLevel !== undefined) {
+      const nextSlideLevelInt = parseInt(nextSlideLevel.slice(5));
+      const slideTitle = Array.from(slideEle.children)[0].innerHTML;
+      if (nextSlideLevelInt === 1) {
+        slidePath = slideTitle;
+      } else if (nextSlideLevelInt > slideLevel) {
+        slidePath = slidePath.concat(" ", PATH_SEP, " ", slideTitle);
+      } else if (nextSlideLevelInt <= slideLevel){
+        let levelDiff = slideLevel - nextSlideLevelInt;
+        while (levelDiff >= 0) {
+          slidePath = slidePath.slice(0, slidePath.lastIndexOf(PATH_SEP));
+          levelDiff = levelDiff - 1;
+        };
+        slidePath = slidePath.concat(PATH_SEP, " ", slideTitle);
+      };
+      slideLevel = nextSlideLevelInt;
+      if (slideLevel > 1) {
+        const slidePathEle = document.createElement("div");
+        slidePathEle.classList.add("path-header");
+        slidePathEle.innerHTML = slidePath.slice(0, slidePath.lastIndexOf(PATH_SEP) + 8).replaceAll(PATH_SEP, "/");
+        slideEle.prepend(slidePathEle);
+      };
+    };
+  });
+</script>
+</body>
+</html>
