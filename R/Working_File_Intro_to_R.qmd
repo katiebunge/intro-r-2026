@@ -8,6 +8,8 @@ date: 2026-03-18
 
 I am learning R. This is my markdown segment.
 
+Examples of Numeric Values
+
 ```{r}
 
 #This is a comment within the code segment. 
@@ -18,11 +20,70 @@ typeof(239.2)
 
 ```
 
+Examples of Character Values 
+
 ```{r}
 #These are examples of character values. 
 
 "This is a character string"
 "SLIPJIG"
 typeof("2/4 is a polka")
+
+```
+
+Working with Vectors 
+
+```{r}
+
+#The operator 'c' stands for 'concatenate'
+
+numbervector <- c(1,2,3)
+charactervector <- c("a", "b", "c")
+binaryvector <- c(TRUE, FALSE)
+mixedvector <- c(1, "two", 3)
+
+numbervector
+charactervector
+binaryvector
+mixedvector
+
+```
+
+
+Exploring Lists 
+
+```{r}
+my_list <- list(numbers = c(1,2,3), words = c("a","b"), mixed = list(TRUE, 5))
+str(my_list)
+
+
+
+```
+
+Data Frames 
+
+```{r}
+sampledf <- data.frame(id = 1:3,
+                       mode = c("walk","car","bus"),
+                       distance = c(1.2, 5.0, 3.4))
+sampledf 
+
+```
+
+Importing and Viewing Data
+
+
+```{r}
+
+
+```
+
+```{r}
+
+
+```
+
+```{r}
+
 
 ```
