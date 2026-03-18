@@ -19,6 +19,10 @@ Participants must bring their own laptop. Prior to the start of the workshop ple
   - Other operating systems, download git [here](https://git-scm.com/install/).
 - We will be using [GitHub](github.com) for this workshop. Please set up an account prior to the workshop.
 
+
+*~ THIS IS AN EDIT MADE BY KATIE ~*  
+
+
 ### Required readings
 - [Wilson, G., Aruliah, D.A., Brown, C.T., Chue Hong, N.P., Davis, M., Guy, R.T, et al. (2014). Best Practices for Scientific Computing. PLoS Biol 12(1): e1001745. https://doi.org/10.1371/journal.pbio.1001745](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1001745)
 - [Broman, K. W., & Woo, K. H. (2018). Data Organization in Spreadsheets. The American Statistician, 72(1), 2–10. https://doi.org/10.1080/00031305.2017.1375989](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989)
