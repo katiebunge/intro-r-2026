@@ -1,0 +1,28 @@
+---
+title: "Intro to R Workshop"
+format: html
+editor: visual
+author: "Katie Bunge"
+date: 2026-03-18
+---
+
+I am learning R. This is my markdown segment.
+
+```{r}
+
+#This is a comment within the code segment. 
+
+42
+194
+typeof(239.2)
+
+```
+
+```{r}
+#These are examples of character values. 
+
+"This is a character string"
+"SLIPJIG"
+typeof("2/4 is a polka")
+
+```
