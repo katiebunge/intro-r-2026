@@ -19,7 +19,7 @@ source("training_source.R")
 Examples of Numeric Values
 
 ```{r}
-
+#| label: numeric values
 #This is a comment within the code segment. 
 
 42
@@ -79,9 +79,7 @@ sampledf
 
 Importing and Viewing Data
 
-Import = load data from a file
-Cleaning = prepare column names 
-Viewing = inspect rows and column types 
+Import = load data from a file Cleaning = prepare column names Viewing = inspect rows and column types
 
 Importing data with rio
 
@@ -91,12 +89,102 @@ survey_raw <- rio::import(csv_path)
 print(survey_raw)
 ```
 
+-- BEGIN DAY 2 OF TRAINING --
+
 ```{r}
+survey_raw |> 
+  glimpse()
+
+survey <- survey_raw |> 
+  clean_names() |> 
+  rename(os = what_operating_system_are_you_using_for_this_workshop,
+         prior_exp = which_of_the_following_are_true_regarding_your_experiences_with_r_prior_to_this_workshop,
+         r_hope = what_do_you_hope_to_use_r_for_in_the_future,                                                 travel_mode = the_workshop_will_be_held_on_the_psu_campus_what_is_your_intended_mode_of_travel_to_the_workshop_check_all_that_apply,
+         travel_direct = do_you_intend_to_travel_directly_from_home_to_the_workshop,
+         distance = how_far_will_you_likely_travel,                               
+         commute_time = what_is_the_approximate_travel_time_for_your_morning_commute_to_psu,                   drink = what_is_your_morning_drink_of_choice,                                                         movie_quote = what_is_the_first_movie_quote_that_comes_to_mind,                                       pineapple_ok = pineapple_is_an_acceptable_pizza_topping
+         )
+
+survey |> 
+  glimpse()
+
+```
+
+```{r}
+linux <- c("linux", "ubuntu", "debian", "fedora", "arch")
+
+survey2 <- survey |> 
+  mutate(commute_digits = str_extract(commute_time, "[0-9]+"),
+         distance_digits = str_extract(distance, "[-]?[\\d]*\\.?[\\d]+"),
+         commute_min = as.numeric(commute_digits),
+         distance_mi = as.numeric(distance_digits),
+         travel_mph = if_else(!is.na(commute_min) & commute_min > 0,
+                              distance_mi / commute_min * 60, NA_real_),
+         os = str_to_lower(os),
+         os_family = case_when(str_detect(os, "win") ~ "Windows",
+                               str_detect(os, "mac|apple") ~ "Mac",
+                               str_detect(os, paste(linux, collapse = "|")) ~ "Linux",
+                               TRUE ~ "Other"
+                               )
+         )
+
+print(survey2)
+
+survey3 <- survey2 |> 
+  select(os, os_family, distance_mi, commute_min, travel_mph)
+
+head(survey3)
+
+```
+
+Data in a long versus wide format 
+
+Example: Survey Data 
+
+Wide Format 
+
+* Q1, Q2, Q3, Q4 are separate variables or "columns" -> this is a "wide" format 
+Row 1: D1.1, D1.2, D1.3, D1.4 
+Row 2: D2.1, D2.2, D2.3, D2.4 
+
+Long Format
+
+Data | Variable 
+--------------
+D1.1 |  Q1 
+D1.2 |  Q2 
+D2.2 |  Q2 
+
+@>->->-| Working to Transform Data   |-<-<-@  
 
 
+```{r}
+long_survey <- survey2 |> 
+  select(distance, commute_time) |> 
+  pivot_longer(cols = c(distance, commute_time), 
+               names_to = "num_text_var", 
+               values_to = "numeric_text") |> 
+  mutate(numeric_text = str_to_lower(numeric_text), .rid = row_number())
+  
+  wide_survey <- long_survey |> 
+    pivot_wider(id_cols = .rid, 
+                names_from = num_text_var, 
+                values_from = numeric_text, 
+                names_repair = "minimal") |> 
+    select(-.rid)
+
+print(wide_survey)
+print(long_survey)
 ```
 
 ```{r}
 
 
 ```
+
+
+```{r}
+
+
+```
+
