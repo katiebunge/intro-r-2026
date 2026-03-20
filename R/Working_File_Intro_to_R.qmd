@@ -137,30 +137,26 @@ head(survey3)
 
 ```
 
-Data in a long versus wide format 
+Data in a long versus wide format
 
-Example: Survey Data 
+Example: Survey Data
 
-Wide Format 
+Wide Format
 
-* Q1, Q2, Q3, Q4 are separate variables or "columns" -> this is a "wide" format 
-Row 1: D1.1, D1.2, D1.3, D1.4 
-Row 2: D2.1, D2.2, D2.3, D2.4 
+-   Q1, Q2, Q3, Q4 are separate variables or "columns" -\> this is a "wide" format Row 1: D1.1, D1.2, D1.3, D1.4 Row 2: D2.1, D2.2, D2.3, D2.4
 
 Long Format
 
-Data | Variable 
---------------
-D1.1 |  Q1 
-D1.2 |  Q2 
-D2.2 |  Q2 
+## Data \| Variable
 
-@>->->-| Working to Transform Data   |-<-<-@  
+D1.1 \| Q1 D1.2 \| Q2 D2.2 \| Q2
 
+\@\>-\>-\>-\| Working to Transform Data \|-\<-\<-\@
 
 ```{r}
 long_survey <- survey2 |> 
   select(distance, commute_time) |> 
+  mutate(rid = row_number()) |> 
   pivot_longer(cols = c(distance, commute_time), 
                names_to = "num_text_var", 
                values_to = "numeric_text") |> 
@@ -177,14 +173,58 @@ print(wide_survey)
 print(long_survey)
 ```
 
+
+--- Begin Day 3 of Training --- 
+
+Working more with Text! 
+
 ```{r}
+number_words <- paste(textclean::replace_number(seq_len(100)), collapse = "|")
+
+text_num_tbl <- tibble(num = seq_len(100)) |> 
+  mutate(
+    word = textclean::replace_number(num),
+    word_num = as.character(num)
+  ) |> 
+  select(word, word_num)
+
+#nchar stands for "number of characters"
+# ~ means "then"
+
+num_words = " "
+
+long_survey <- survey2 |> 
+  select(distance, commute_time) |> 
+  mutate(rid = row_number()) |> 
+  pivot_longer(cols = c(distance, commute_time), 
+               names_to = "num_text_var", 
+               values_to = "numeric_text") |> 
+  mutate(numeric_text = str_to_lower(numeric_text)) |> 
+  filter(nchar(as.character(numeric_text))>2) |> 
+  mutate(num_words = str_extract_all(numeric_text, number_words, simplify = T)) |> 
+  mutate(num_words = case_when(nchar(num_words[,1])<2 ~ NA_character_,
+                               nchar(num_words[,2])> 2 ~
+                                       paste(num_words[,1], num_words[,2], sep = "-"),
+                                     TRUE ~ num_words[,1])
+         ) |> 
+  left_join(select(text_num_tbl, word, word_num), by = c("num_words" = "word")) |>   
+  mutate(num_raw = case_when(!is.na(word_num) ~ word_num,
+                             str_detect(numeric_text, "\\ban\\b") ~ "1",
+                             TRUE ~ numeric_text),
+         num = parse_number(num_raw),
+         #example of pulling out strings state = str_extract(numeric_text, "[A-Z]{2}")
+         )
+
+print(long_survey)
+
+#recommendation to install strex package for additional functionality searching within strings. Can use regex for same functionality but it's more of a pain to write. 
+
+#pdftools package recommendation for working with PDFs - importing PDFs 
+
 
 
 ```
 
+Tips and Tricks 
 
-```{r}
-
-
-```
-
+tidytext sentiment analysis - written by Julia Silge

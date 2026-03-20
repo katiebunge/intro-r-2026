@@ -11,7 +11,9 @@ pkgs <- c(
   "stringr", #string utilities
   "janitor", #clean_names(), tabyl(), etc. Useful for cleaning data 
   "scales", #percent_format and friends 
-  "tidycensus" #ACS API wrapper (optional bonus section)
+  # "tidycensus", #ACS API wrapper (optional bonus section)
+  "summarytools",
+  "textclean"
 )
 
 need <- pkgs[!pkgs %in% rownames(installed.packages())]

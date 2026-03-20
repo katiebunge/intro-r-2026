@@ -1,5 +1,6 @@
 library(ggplot2)
 library(dplyr)
+library(tigris)
 
 figure_function <- function(stid, measure){
   station_current <- stations_df |> 
@@ -19,3 +20,4 @@ figure_function <- function(stid, measure){
                color = "#aaaaaa")
   station_current
 }
+
