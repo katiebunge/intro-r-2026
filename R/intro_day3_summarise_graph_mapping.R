@@ -4,9 +4,9 @@ library(tidyr)
 library(dplyr)
 library(lubridate)
 library(ggplot2)
-library()
-library()
-library()
+#library()
+#library()
+#library()
 
 #   --Today's Topic: 
 #   --Working with date and time in lubridate
@@ -53,10 +53,34 @@ str(stations_df)
 
 station_1059 <- stations_df |> 
   filter(stationid == 1059) |> 
+  right_join(starttime_seq, by = "starttime") |> 
   ggplot(aes(x = starttime, y = tot_volume)) +
-  geom_line() +
-  geom_point()
+  geom_line(color = "#007b5f") +
+  geom_point(color = "#a9c47f") +
+  scale_x_datetime(
+    date_breaks = "1 day",
+    date_labels = "%Y-%m-%d",
+    guide = guide_axis(angle = 45)
+  )+
+  xlab(NULL) +
+  theme_light() + 
+  geom_hline(yintercept = mean(stations_df$tot_volume),
+             color = "#aaaaaa")
+
 station_1059
+
+
+#create a new record or sequence to populate missing values
+#create new vector sequence for counts that don't exist 
+
+starttime_seq <- seq(
+  from = ymd_hms("2026-02-01 00:00:00" , tz = "US/Pacific"),
+  to = ymd_hms("2026-02-16 00:00:00", tz = "US/Pacific"),
+  by = "15 min"
+) |> 
+  as.data.frame()
+colnames(starttime_seq) <- c("starttime")
+
 
 #clean_df_filter <- clean_df |> 
   #filter(detector_id == "101984")
